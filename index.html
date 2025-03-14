@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body class="container mt-5">
+    <div id="app"></div>
+
+    <form class="mb-4">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="payment">Payment:</label>
+        <input type="text" id="payment" name="payment" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="industry">Industry:</label>
+        <input type="text" id="industry" name="industry" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" class="form-control" required />
+      </div>
+      <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Last Name</th>
+          <th>First Name</th>
+          <th>Payment</th>
+          <th>Industry</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody id="data-table-body">
+        <!-- Data rows will be appended here by JavaScript -->
+      </tbody>
+    </table>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
