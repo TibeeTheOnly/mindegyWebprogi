@@ -26,6 +26,12 @@ const postData = (lastName, firstName, payment, industry, location) => {
   }).then(handleApiResponse);
 };
 
+const deleteData = (id) => {
+  return fetch(`${API_URL}/${id}`, {
+    method: 'DELETE'
+  }).then(handleApiResponse);
+};
+
 // DOM manipulation functions
 const displayList = (data) => {
   const tableBody = document.getElementById('data-table-body');
@@ -38,6 +44,7 @@ const displayList = (data) => {
       <td>${element.payment}</td>
       <td>${element.industry}</td>
       <td>${element.location}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="handleDelete(${element.id})">Delete</button></td>
     `;
     tableBody.appendChild(row);
   });
@@ -82,6 +89,19 @@ const handleSubmit = async (event) => {
     displayError(error.message);
   }
 };
+
+const handleDelete = async (id) => {
+  try {
+    await deleteData(id);
+    await updateList();
+  } catch (error) {
+    console.error('Error in delete event:', error);
+    displayError(error.message);
+  }
+};
+
+// Attach handleDelete to the window object
+window.handleDelete = handleDelete;
 
 // Initialization
 const init = async () => {
