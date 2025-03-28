@@ -41,7 +41,20 @@
         </tr>
       </thead>
       <tbody id="data-table-body">
-        <!-- Data rows will be appended here by JavaScript -->
+        <!-- Rows will be dynamically added here -->
+        <!-- Example row structure:
+        <tr data-id="1">
+          <td>Doe</td>
+          <td>John</td>
+          <td>5000</td>
+          <td>IT</td>
+          <td>New York</td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="handleEdit(1)">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="handleDelete(1)">Delete</button>
+          </td>
+        </tr>
+        -->
       </tbody>
     </table>
 

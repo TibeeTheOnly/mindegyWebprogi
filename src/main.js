@@ -26,6 +26,14 @@ const postData = (lastName, firstName, payment, industry, location) => {
   }).then(handleApiResponse);
 };
 
+const updateData = (id, updatedData) => {
+  return fetch(`${API_URL}/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updatedData)
+  }).then(handleApiResponse);
+};
+
 const deleteData = (id) => {
   return fetch(`${API_URL}/${id}`, {
     method: 'DELETE'
@@ -38,13 +46,17 @@ const displayList = (data) => {
   tableBody.innerHTML = ''; // Clear existing rows
   data.forEach((element) => {
     const row = document.createElement('tr');
+    row.setAttribute('data-id', element.id);
     row.innerHTML = `
       <td>${element.lastName}</td>
       <td>${element.firstName}</td>
       <td>${element.payment}</td>
       <td>${element.industry}</td>
       <td>${element.location}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="handleDelete(${element.id})">Delete</button></td>
+      <td>
+        <button class="btn btn-warning btn-sm" onclick="handleEdit(${element.id})">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="handleDelete(${element.id})">Delete</button>
+      </td>
     `;
     tableBody.appendChild(row);
   });
@@ -77,8 +89,21 @@ const handleSubmit = async (event) => {
   }
 
   try {
-    const data = await postData(lastName, firstName, paymentInput.value, industryInput.value, locationInput.value);
-    console.log('Data posted:', data);
+    if (nameInput.dataset.editingId) {
+      // Update existing entry
+      const id = nameInput.dataset.editingId;
+      await updateData(id, {
+        lastName,
+        firstName,
+        payment: paymentInput.value,
+        industry: industryInput.value,
+        location: locationInput.value
+      });
+      delete nameInput.dataset.editingId; // Clear editing state
+    } else {
+      // Create new entry
+      await postData(lastName, firstName, paymentInput.value, industryInput.value, locationInput.value);
+    }
     await updateList();
     nameInput.value = ''; // Clear input after successful submission
     paymentInput.value = '';
@@ -100,8 +125,32 @@ const handleDelete = async (id) => {
   }
 };
 
-// Attach handleDelete to the window object
+const handleEdit = (id) => {
+  const row = document.querySelector(`tr[data-id="${id}"]`);
+  if (!row) return;
+
+  const nameInput = document.getElementById('name');
+  const paymentInput = document.getElementById('payment');
+  const industryInput = document.getElementById('industry');
+  const locationInput = document.getElementById('location');
+
+  const lastName = row.querySelector('td:nth-child(1)').textContent;
+  const firstName = row.querySelector('td:nth-child(2)').textContent;
+  const payment = row.querySelector('td:nth-child(3)').textContent;
+  const industry = row.querySelector('td:nth-child(4)').textContent;
+  const location = row.querySelector('td:nth-child(5)').textContent;
+
+  nameInput.value = `${lastName} ${firstName}`;
+  paymentInput.value = payment;
+  industryInput.value = industry;
+  locationInput.value = location;
+
+  nameInput.dataset.editingId = id; // Store the ID of the row being edited
+};
+
+// Attach handleDelete and handleEdit to the window object
 window.handleDelete = handleDelete;
+window.handleEdit = handleEdit;
 
 // Initialization
 const init = async () => {
